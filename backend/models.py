@@ -19,3 +19,15 @@ class Place(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(200))
+
+class Person(Base):
+    __tablename__ = "people"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(200))
+
+class EventPerson(Base):
+    __tablename__ = "event_people"
+
+    event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), primary_key=True)
+    person_id: Mapped[int] = mapped_column(ForeignKey("people.id"), primary_key=True)
