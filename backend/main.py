@@ -68,7 +68,7 @@ def create_event(event: EventCreate, db: Session = Depends(get_db)):
         "year": new_event.year,
         "place_id": new_event.place_id,
     } 
-    
+
 @app.get("/events")
 def list_events(db: Session = Depends(get_db)):
     events = db.scalars(select(Event)).all()
@@ -76,3 +76,15 @@ def list_events(db: Session = Depends(get_db)):
         {"id": e.id, "title": e.title, "year": e.year, "place_id": e.place_id}
         for e in events
     ]
+
+def test_create_event(client):
+    response = client.post(
+        "/events",
+        json={"title": "Storming of the Bastille", "year": 1789},
+    )
+    assert response.status_code == 200
+    assert response.json()["title"] == "Storming of the Bastille"
+    assert response.json()["year"] == 1789
+
+    
+
