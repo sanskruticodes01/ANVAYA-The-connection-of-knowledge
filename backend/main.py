@@ -73,7 +73,13 @@ def create_event(event: EventCreate, db: Session = Depends(get_db)):
 def list_events(db: Session = Depends(get_db)):
     events = db.scalars(select(Event)).all()
     return [
-        {"id": e.id, "title": e.title, "year": e.year, "place_id": e.place_id}
+        {
+            "id": e.id, 
+            "title": e.title, 
+            "year": e.year, 
+            "place_id": e.place_id,
+            "place" : e.place.name if e.place else None,
+        }
         for e in events
     ]
 
