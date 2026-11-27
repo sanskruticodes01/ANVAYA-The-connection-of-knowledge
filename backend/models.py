@@ -1,7 +1,6 @@
 
 from sqlalchemy import ForeignKey, String, Text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 class Base(DeclarativeBase):
     pass
@@ -15,6 +14,7 @@ class Event(Base):
     place_id: Mapped[int | None] = mapped_column(ForeignKey("places.id"))
     description: Mapped[str | None] = mapped_column(Text())
     year: Mapped[int | None] = mapped_column()
+    place : Mapped["Place"] = relationship()
     
 class Place(Base):
     __tablename__ = "places"
