@@ -1,5 +1,5 @@
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -13,7 +13,9 @@ class Event(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(200))
     place_id: Mapped[int | None] = mapped_column(ForeignKey("places.id"))
-
+    description: Mapped[str | None] = mapped_column(Text())
+    year: Mapped[int | None] = mapped_column()
+    
 class Place(Base):
     __tablename__ = "places"
 

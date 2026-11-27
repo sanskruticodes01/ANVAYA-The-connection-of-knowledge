@@ -3,8 +3,8 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 from sqlalchemy import select, text
 from backend.database import engine, get_db
-from backend.models import Place
-from backend.schemas import PlaceCreate
+from backend.models import  Event , Place
+from backend.schemas import  EventCreate , PlaceCreate
 
 app = FastAPI()
 
@@ -50,3 +50,29 @@ def delete_place(place_id: int, db: Session = Depends(get_db)):
     db.delete(existing)
     db.commit()
     return {"deleted": place_id}
+
+@app.post("/events")
+def create_event(event: EventCreate, db: Session = Depends(get_db)):
+    new_event = Event(
+        title=event.title,
+        description=event.description,
+        year=event.year,
+        place_id=event.place_id,
+    )
+    db.add(new_event)
+    db.commit()
+    db.refresh(new_event)
+    return {
+        "id": new_event.id,
+        "title": new_event.title,
+        "year": new_event.year,
+        "place_id": new_event.place_id,
+    } 
+    
+@app.get("/events")
+def list_events(db: Session = Depends(get_db)):
+    events = db.scalars(select(Event)).all()
+    return [
+        {"id": e.id, "title": e.title, "year": e.year, "place_id": e.place_id}
+        for e in events
+    ]
